@@ -23,8 +23,8 @@ sudo apt-get update -y
 sudo apt-get install -y docker-ce
 
 # Configure Docker
-sed -i -e '/DOCKER_HOST=/d' $BASHRC
-echo "export DOCKER_HOST=localhost" >> $BASHRC
+sed -i -e '/DOCKER_HOST=/d' $ZSHRC
+echo "export DOCKER_HOST=localhost" >> $ZSHRC
 
 # Install Zsh
 sudo apt-get install -y zsh
@@ -43,8 +43,8 @@ fi
 # Configure Oh My Zsh
 ZSH_THEMES=$ZSH/custom/themes/
 mkdir -p $ZSH_THEMES
-wget -P $ZSH_THEMES -qO- https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme
-wget -P $ZSH_THEMES -qO- https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme
+wget -P $ZSH_THEMES -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme
+wget -P $ZSH_THEMES -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme
 
 sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"robbyrussell-for-wsl\" ' $ZSHRC
 sed -i -e 's/^plugins=\(.*\)/plugins=(git docker mvn ubuntu tmuxinator git-flow pip python terraform)/' $ZSHRC
@@ -65,38 +65,38 @@ fi
 # Configure variables
 
 # Fix WSL Windows colors
-sed -i -e '/LS_COLORS=/d' $BASHRC
-echo "export LS_COLORS='ow=01;36;40'" >> $BASHRC
+sed -i -e '/LS_COLORS=/d' $ZSHRC
+echo "export LS_COLORS='ow=01;36;40'" >> $ZSHRC
 
-sed -i -e '/TERM=/d' $BASHRC
-echo "export TERM=xterm-256color" >> $BASHRC
+sed -i -e '/TERM=/d' $ZSHRC
+echo "export TERM=xterm-256color" >> $ZSHRC
 
 # Configure tmuxinator
-#sed -i -e '/SHELL=/d' $BASHRC
-#echo "export SHELL=$(which zsh)" >> $BASHRC
-#sed -i -e '/EDITOR=/d' $BASHRC
-#echo "export EDITOR=$(which vim)" >> $BASHRC
+#sed -i -e '/SHELL=/d' $ZSHRC
+#echo "export SHELL=$(which zsh)" >> $ZSHRC
+#sed -i -e '/EDITOR=/d' $ZSHRC
+#echo "export EDITOR=$(which vim)" >> $ZSHRC
 
 # Configure folders
-sed -i -e '/PROJECTS=/d' $BASHRC
-echo "export PROJECTS=$PROJECTS" >> $BASHRC
+sed -i -e '/PROJECTS=/d' $ZSHRC
+echo "export PROJECTS=$PROJECTS" >> $ZSHRC
 
-sed -i -e '/TMP=/d' $BASHRC
-echo "export TMP=$TMP" >> $BASHRC
+sed -i -e '/TMP=/d' $ZSHRC
+echo "export TMP=$TMP" >> $ZSHRC
 
-sed -i -e '/WINDOWS_HOME=/d' $BASHRC
-echo "export WINDOWS_HOME=$(cmd.exe \/C 'echo %USERPROFILE%' 2> /dev/null | tr -d '[:space:]')" >> $BASHRC
+sed -i -e '/WINDOWS_HOME=/d' $ZSHRC
+echo "export WINDOWS_HOME='/mnt/c/Users/$(cmd.exe \/C 'echo %USERNAME%' 2> /dev/null | tr -d '[:space:]')'" >> $ZSHRC
 
-sed -i -e '/alias p=/d' $BASHRC
-echo 'alias p="cd $PROJECTS"' >> $BASHRC
+sed -i -e '/alias p=/d' $ZSHRC
+echo 'alias p="cd $PROJECTS"' >> $ZSHRC
 
-sed -i -e '/alias t=/d' $BASHRC
-echo 'alias t="cd $TMP"' >> $BASHRC
+sed -i -e '/alias t=/d' $ZSHRC
+echo 'alias t="cd $TMP"' >> $ZSHRC
 
-sed -i -e '/alias h=/d' $BASHRC
-echo 'alias h="cd $WINDOWS_HOME"' >> $BASHRC
+sed -i -e '/alias h=/d' $ZSHRC
+echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
 
 # Start zsh by default
-# sed -i -e '/exec \"zsh\"/d' $BASHRC
-# echo "exec \"zsh\"" >> $BASHRC
-# echo "prompt_context(){}" >> $BASHRC
+sed -i -e '/exec \"zsh\"/d' $BASHRC
+echo "exec \"zsh\"" >> $BASHRC
+# echo "prompt_context(){}" >> $ZSHRC
