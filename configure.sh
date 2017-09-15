@@ -85,6 +85,17 @@ function install_fzf {
     fi
 }
 
+function install_whalebox {
+    # Install whalebox (https://github.com/zer0beat/whalebox)
+    WHALEBOX=~/.whalebox
+    if [[ ! -e "$WHALEBOX" ]]; then
+        mkdir -p $WHALEBOX
+        wget -P $WHALEBOX -q https://raw.githubusercontent.com/zer0beat/whalebox/master/whalebox.sh
+    fi
+    sed -i -e "/whalebox.sh/d" $ZSHRC
+    echo "source $WHALEBOX/whalebox.sh" >> $ZSHRC
+}
+
 function clean_this_elements_from {
     local types=$1
     local elements=$2
@@ -114,6 +125,7 @@ install_fzf
 install_docker
 install_tmux
 install_vim
+install_whalebox
 
 # Configure variables
 clean_this_exports_from "LS_COLORS TERM SHELL EDITOR PROJECTS TMP WINDOWS_HOME" $ZSHRC
