@@ -90,10 +90,10 @@ function install_whalebox {
     WHALEBOX=~/.whalebox
     if [[ ! -e "$WHALEBOX" ]]; then
         mkdir -p $WHALEBOX
-        wget -P $WHALEBOX -q https://raw.githubusercontent.com/zer0beat/whalebox/master/whalebox.sh
+        wget -P $WHALEBOX -q https://raw.githubusercontent.com/zer0beat/whalebox/master/whalebox.zsh
     fi
-    sed -i -e "/whalebox.sh/d" $ZSHRC
-    echo "source $WHALEBOX/whalebox.sh" >> $ZSHRC
+    sed -i -e "/whalebox.zsh/d" $ZSHRC
+    echo "source $WHALEBOX/whalebox.zsh" >> $ZSHRC
 }
 
 function clean_this_elements_from {
