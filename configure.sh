@@ -117,6 +117,15 @@ function clean_this_alias_from {
     clean_this_elements_from "alias" "$1" "$2"
 }
 
+function install_powerline_fonts {
+    FONTS=$TMP/fonts
+    git clone https://github.com/powerline/fonts.git $FONTS
+    pushd .
+    cd $FONTS
+    powershell.exe install.ps1
+    popd
+}
+
 function configure_windows_registry {
     THEME=${THEME:-base16-google-dark-256}
     wget -P $TMP -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg
@@ -132,6 +141,7 @@ sudo apt-get update -y
 clean
 if is_wsl; then
     echo "You are on Windows Subsystem Linux!"
+    install_powerline_fonts
     configure_windows_registry
 fi
 install_git
@@ -164,4 +174,4 @@ echo 'alias t="cd $TMP"' >> $ZSHRC
 echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
 
 # echo "prompt_context(){}" >> $ZSHRC
-chsh -s $(grep /zsh$ /etc/shells | tail -1)
+chsh $USER -s $(grep /zsh$ /etc/shells | tail -1)
