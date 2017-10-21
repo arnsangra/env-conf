@@ -119,7 +119,7 @@ function clean_this_alias_from {
 
 function configure_windows_registry {
     THEME=${THEME:-base16-google-dark-256}
-    wget -P $TMP -q https://raw.githubusercontent.com/zer0beat/env_conf/master/console_${THEME}.reg
+    wget -P $TMP -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg
     pushd .
     cd $TMP
     reg.exe import console_${THEME}.reg
