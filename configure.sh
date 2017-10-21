@@ -1,5 +1,13 @@
 #!/bin/bash
 
+function is_wsl {
+    if [[ -e /mnt/c/Windows/System32/cmd.exe ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 function clean {
     sudo apt-get remove -y tmux vim
 }
@@ -32,10 +40,6 @@ function install_git {
 function install_zsh {
     # Install Zsh
     sudo apt-get install -y zsh
-
-    # Start zsh by default
-    sed -i -e '/exec \"zsh\"/d' $BASHRC
-    echo "exec \"zsh\"" >> $BASHRC
 }
 
 function install_omz {
@@ -113,11 +117,23 @@ function clean_this_alias_from {
     clean_this_elements_from "alias" "$1" "$2"
 }
 
-BASHRC=~/.bashrc
+function configure_windows_registry {
+    THEME=${THEME:-base16-google-dark-256}
+    wget -P $TMP -q https://raw.githubusercontent.com/zer0beat/env_conf/master/console_${THEME}.reg
+    pushd .
+    cd $TMP
+    reg.exe import console_${THEME}.reg
+    popd
+}
+
 ZSHRC=~/.zshrc
 
 sudo apt-get update -y
 clean
+if is_wsl; then
+    echo "You are on Windows Subsystem Linux!"
+    configure_windows_registry
+fi
 install_git
 install_zsh
 install_omz
@@ -125,15 +141,14 @@ install_fzf
 install_docker
 install_tmux
 install_vim
-install_whalebox
+#install_whalebox
 
 # Configure variables
-clean_this_exports_from "LS_COLORS TERM SHELL EDITOR PROJECTS TMP WINDOWS_HOME" $ZSHRC
+clean_this_exports_from "LS_COLORS SHELL EDITOR PROJECTS TMP WINDOWS_HOME" $ZSHRC
 clean_this_alias_from "p t h" $ZSHRC
 
 # Fix WSL Windows colors
 echo "export LS_COLORS='ow=01;36;40'" >> $ZSHRC
-echo "export TERM=xterm-256color" >> $ZSHRC
 
 # Configure tmuxinator
 echo "export SHELL=$(which zsh)" >> $ZSHRC
@@ -149,3 +164,4 @@ echo 'alias t="cd $TMP"' >> $ZSHRC
 echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
 
 # echo "prompt_context(){}" >> $ZSHRC
+chsh -s $(grep /zsh$ /etc/shells | tail -1)
