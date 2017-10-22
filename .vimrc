@@ -25,6 +25,10 @@ call vundle#rc()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'edkolev/tmuxline.vim'
+
 if iCanHazVundle == 0
   echo "Installing Bundles, please ignore key map error messages"
   echo ""
@@ -37,10 +41,6 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
-
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'edkolev/tmuxline.vim'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
