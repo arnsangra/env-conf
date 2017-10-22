@@ -130,20 +130,20 @@ function install_powerline_fonts {
     FONTS=$TMP/fonts
     rm -rf $FONTS
     git clone https://github.com/powerline/fonts.git $FONTS &>$LOGFILE
-    pushd .
+    pushd . &>$LOGFILE
     cd $FONTS
     powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\"" &>$LOGFILE
-    popd
+    popd &>$LOGFILE
 }
 
 function configure_windows_console {
     echo "Configuring Windows console"
     THEME=${THEME:-base16-google-dark-256}
-    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg
-    pushd .
+    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg &>$LOGFILE
+    pushd . &>$LOGFILE
     cd $TMP
-    reg.exe import console_${THEME}.reg
-    popd
+    reg.exe import console_${THEME}.reg &>$LOGFILE
+    popd &>$LOGFILE
 }
 
 LOGFILE=$TMP/env_conf.log
