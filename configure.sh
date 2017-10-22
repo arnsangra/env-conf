@@ -47,7 +47,7 @@ function install_zsh {
 
 function install_omz {
     # Install Oh My Zsh (https://github.com/robbyrussell/oh-my-zsh)
-    echo "Installing Oh my zsh"
+    echo "Installing oh my zsh"
     ZSH=~/.oh-my-zsh
     if [[ ! -e "$ZSH" ]]; then
         git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH &>>$LOGFILE
@@ -140,10 +140,13 @@ function configure_windows_console {
     echo "Configuring Windows console"
     THEME=${THEME:-base16-google-dark-256}
     wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg &>>$LOGFILE
+    wget -O $TMP/Create-CmdShortcut.ps1 -q https://raw.githubusercontent.com/zer0beat/env-conf/master/Create-CmdShortcut.ps1 &>>$LOGFILE
     pushd . &>>$LOGFILE
     cd $TMP
     reg.exe import console_${THEME}.reg &>>$LOGFILE
+    powershell.exe ./Create-CmdShortcut.ps1 &>>$LOGFILE
     popd &>>$LOGFILE
+
 }
 
 LOGFILE=$TMP/env_conf.log
