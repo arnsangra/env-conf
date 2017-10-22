@@ -12,6 +12,10 @@ function clean {
     sudo apt-get remove -y tmux vim &>>$LOGFILE
 }
 
+function update {
+    sudo apt-get update -y &>$LOGFILE
+}
+
 function install_docker {
     # Install Docker
     echo "Installing docker"
@@ -96,13 +100,7 @@ function install_vim {
 function configure_vim {
     # Configure vim
     echo "Configuring vim"
-    VUNDLE=~/.vim/bundle/Vundle.vim
-    if [[ ! -e "$VUNDLE" ]]; then
-        git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE &>>$LOGFILE
-    fi
-
     wget -O $HOME/.vimrc -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.vimrc &>>$LOGFILE
-    #vim +PluginInstall +qall &>>$LOGFILE
 }
 
 function install_fzf {
@@ -167,10 +165,40 @@ function configure_windows_console {
     popd &>>$LOGFILE
 }
 
+function configure_variables {
+    echo "Configuring variables"
+    # Configure variables
+    clean_this_exports_from "LS_COLORS SHELL EDITOR PROJECTS TMP WINDOWS_HOME" $ZSHRC
+    clean_this_alias_from "p t h" $ZSHRC
+
+    # Fix WSL Windows colors
+    echo "export LS_COLORS='ow=01;36;40'" >> $ZSHRC
+
+    # Configure tmuxinator
+    echo "export SHELL=$(which zsh)" >> $ZSHRC
+    echo "export EDITOR=$(which vim)" >> $ZSHRC
+
+    # Configure folders
+    echo "export PROJECTS=$PROJECTS" >> $ZSHRC
+    echo "export TMP=$TMP" >> $ZSHRC
+    echo "export WINDOWS_HOME='/mnt/c/Users/$(cmd.exe \/C 'echo %USERNAME%' 2> /dev/null | tr -d '[:space:]')'" >> $ZSHRC
+
+    echo 'alias p="cd $PROJECTS"' >> $ZSHRC
+    echo 'alias t="cd $TMP"' >> $ZSHRC
+    echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
+}
+
+function change_shell {
+    echo "Changing shell to zsh"
+    sudo sed -i 's/auth       required   pam_shells.so/auth       sufficient   pam_shells.so/' /etc/pam.d/chsh
+    chsh -s $(which zsh)
+    sudo sed -i 's/auth       sufficient   pam_shells.so/auth       required   pam_shells.so/' /etc/pam.d/chsh
+}
+
 LOGFILE=$TMP/env_conf.log
 ZSHRC=~/.zshrc
 
-sudo apt-get update -y &>$LOGFILE
+update
 clean
 if is_wsl; then
     echo "You are on Windows Subsystem Linux!"
@@ -187,28 +215,5 @@ configure_tmux
 install_vim
 configure_vim
 #install_whalebox
-
-# Configure variables
-clean_this_exports_from "LS_COLORS SHELL EDITOR PROJECTS TMP WINDOWS_HOME" $ZSHRC
-clean_this_alias_from "p t h" $ZSHRC
-
-# Fix WSL Windows colors
-echo "export LS_COLORS='ow=01;36;40'" >> $ZSHRC
-
-# Configure tmuxinator
-echo "export SHELL=$(which zsh)" >> $ZSHRC
-echo "export EDITOR=$(which vim)" >> $ZSHRC
-
-# Configure folders
-echo "export PROJECTS=$PROJECTS" >> $ZSHRC
-echo "export TMP=$TMP" >> $ZSHRC
-echo "export WINDOWS_HOME='/mnt/c/Users/$(cmd.exe \/C 'echo %USERNAME%' 2> /dev/null | tr -d '[:space:]')'" >> $ZSHRC
-
-echo 'alias p="cd $PROJECTS"' >> $ZSHRC
-echo 'alias t="cd $TMP"' >> $ZSHRC
-echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
-
-sudo sed -i 's/auth       required   pam_shells.so/auth       sufficient   pam_shells.so/' /etc/pam.d/chsh
-chsh -s $(which zsh)
-sudo sed -i 's/auth       sufficient   pam_shells.so/auth       required   pam_shells.so/' /etc/pam.d/chsh
-env zsh
+configure_variables
+change_shell
