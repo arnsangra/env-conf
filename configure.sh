@@ -9,7 +9,7 @@ function is_wsl {
 }
 
 function clean {
-    sudo apt-get remove -y tmux vim
+    sudo apt-get remove -y tmux vim &>$LOGFILE
 }
 
 function install_docker {
@@ -34,19 +34,22 @@ function install_docker {
 
 function install_git {
     # Install Git
-    sudo apt-get install -y git
+    echo "Installing git"
+    sudo apt-get install -y git &>$LOGFILE
 }
 
 function install_zsh {
     # Install Zsh
-    sudo apt-get install -y zsh
+    echo "Installing zsh"
+    sudo apt-get install -y zsh &>$LOGFILE
 }
 
 function install_omz {
     # Install Oh My Zsh (https://github.com/robbyrussell/oh-my-zsh)
+    echo "Installing Oh my zsh"
     ZSH=~/.oh-my-zsh
     if [[ ! -e "$ZSH" ]]; then
-        git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH
+        git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH &>$LOGFILE
         cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
         sed "/^export ZSH=/ c\\
         export ZSH=$ZSH
@@ -57,8 +60,8 @@ function install_omz {
     # Configure Oh My Zsh
     ZSH_THEMES=$ZSH/custom/themes/
     mkdir -p $ZSH_THEMES
-    wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme
-    wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme
+    wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme &>$LOGFILE
+    wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme &>$LOGFILE
 
     sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"robbyrussell-for-wsl\" ' $ZSHRC
     sed -i -e 's/^plugins=\(.*\)/plugins=(git docker mvn ubuntu tmuxinator git-flow pip python terraform)/' $ZSHRC
@@ -66,26 +69,29 @@ function install_omz {
 
 function install_tmux {
     # Install tmux (https://github.com/tmux/tmux)
-    type tmux
+    echo "Installing tmux"
+    type tmux &>$LOGFILE
     if [[ $? -ne 0 ]]; then
-        wget -qO- https://gist.github.com/zer0beat/04824c72055fa47325490ee5f842fa4f/raw | TMUX_VERSION=2.5 bash
+        wget -qO- https://gist.github.com/zer0beat/04824c72055fa47325490ee5f842fa4f/raw | TMUX_VERSION=2.5 bash &>$LOGFILE
     fi
 }
 
 function install_vim {
-    # Install tmux (https://github.com/vim/vim)
-    type vim
+    # Install vim (https://github.com/vim/vim)
+    echo "Installing vim"
+    type vim &>$LOGFILE
     if [[ $? -ne 0 ]]; then
-        wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash
+        wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash &>$LOGFILE
     fi
 }
 
 function install_fzf {
     # Install fzf (https://github.com/junegunn/fzf)
+    echo "Installing fzf"
     FZF=~/.fzf
     if [[ ! -e "$FZF" ]]; then
-        git clone --depth 1 https://github.com/junegunn/fzf.git $FZF
-        $FZF/install --all
+        git clone --depth 1 https://github.com/junegunn/fzf.git $FZF &>$LOGFILE
+        $FZF/install --all &>$LOGFILE
     fi
 }
 
@@ -119,6 +125,7 @@ function clean_this_alias_from {
 
 function install_powerline_fonts {
     FONTS=$TMP/fonts
+    rm -rf $FONTS
     git clone https://github.com/powerline/fonts.git $FONTS
     pushd .
     cd $FONTS
@@ -135,9 +142,10 @@ function configure_windows_console {
     popd
 }
 
+LOGFILE=$TMP/env_conf.log
 ZSHRC=~/.zshrc
 
-sudo apt-get update -y
+sudo apt-get update -y &>$LOGFILE
 clean
 if is_wsl; then
     echo "You are on Windows Subsystem Linux!"
