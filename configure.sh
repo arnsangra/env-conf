@@ -14,7 +14,7 @@ function clean {
 
 function install_docker {
     # Install Docker
-    echo "Installing Docker"
+    echo "Installing docker"
     sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
@@ -98,7 +98,7 @@ function install_fzf {
 
 function install_whalebox {
     # Install whalebox (https://github.com/zer0beat/whalebox)
-    echo "Installing Whalebox"
+    echo "Installing whalebox"
     WHALEBOX=~/.whalebox
     if [[ ! -e "$WHALEBOX" ]]; then
         mkdir -p $WHALEBOX
@@ -126,7 +126,7 @@ function clean_this_alias_from {
 }
 
 function install_powerline_fonts {
-    echo "Installing Powerline fonts"
+    echo "Installing powerline fonts"
     FONTS=$TMP/fonts
     rm -rf $FONTS
     git clone https://github.com/powerline/fonts.git $FONTS &>>$LOGFILE
