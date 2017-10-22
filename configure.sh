@@ -188,8 +188,6 @@ echo 'alias p="cd $PROJECTS"' >> $ZSHRC
 echo 'alias t="cd $TMP"' >> $ZSHRC
 echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
 
-# echo "prompt_context(){}" >> $ZSHRC
-
 sudo sed -i 's/auth       required   pam_shells.so/auth       sufficient   pam_shells.so/' /etc/pam.d/chsh
 chsh -s $(which zsh)
 sudo sed -i 's/auth       sufficient   pam_shells.so/auth       required   pam_shells.so/' /etc/pam.d/chsh
