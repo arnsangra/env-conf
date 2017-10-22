@@ -77,6 +77,13 @@ function install_tmux {
     fi
 }
 
+function configure_tmux {
+    # Configure tmux
+    echo "Configuring tmux"
+    wget -O $HOME/.tmux.conf -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.tmux.conf &>>$LOGFILE
+    wget -O $HOME/.tmuxline.snap -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.tmuxline.snap &>>$LOGFILE
+}
+
 function install_vim {
     # Install vim (https://github.com/vim/vim)
     echo "Installing vim"
@@ -84,6 +91,18 @@ function install_vim {
     if [[ $? -ne 0 ]]; then
         wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash &>>$LOGFILE
     fi
+}
+
+function configure_vim {
+    # Configure vim
+    echo "Configuring vundle"
+    VUNDLE=~/.vim/bundle/Vundle.vim
+    if [[ ! -e "$ZSH" ]]; then
+        git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE
+    fi
+
+    wget -O $HOME/.vimrc -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.vimrc &>>$LOGFILE
+    vim +PluginInstall +qall
 }
 
 function install_fzf {
@@ -191,4 +210,4 @@ echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
 sudo sed -i 's/auth       required   pam_shells.so/auth       sufficient   pam_shells.so/' /etc/pam.d/chsh
 chsh -s $(which zsh)
 sudo sed -i 's/auth       sufficient   pam_shells.so/auth       required   pam_shells.so/' /etc/pam.d/chsh
-exec zsh
+env zsh
