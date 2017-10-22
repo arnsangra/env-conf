@@ -184,7 +184,9 @@ install_omz
 install_fzf
 install_docker
 install_tmux
+configure_tmux
 install_vim
+configure_vim
 #install_whalebox
 
 # Configure variables
