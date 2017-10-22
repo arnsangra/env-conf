@@ -57,8 +57,8 @@ function install_omz {
     # Configure Oh My Zsh
     ZSH_THEMES=$ZSH/custom/themes/
     mkdir -p $ZSH_THEMES
-    wget -P $ZSH_THEMES -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme
-    wget -P $ZSH_THEMES -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme
+    wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme
+    wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme
 
     sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"robbyrussell-for-wsl\" ' $ZSHRC
     sed -i -e 's/^plugins=\(.*\)/plugins=(git docker mvn ubuntu tmuxinator git-flow pip python terraform)/' $ZSHRC
@@ -94,7 +94,7 @@ function install_whalebox {
     WHALEBOX=~/.whalebox
     if [[ ! -e "$WHALEBOX" ]]; then
         mkdir -p $WHALEBOX
-        wget -P $WHALEBOX -q https://raw.githubusercontent.com/zer0beat/whalebox/master/whalebox.zsh
+        wget -O $WHALEBOX/whalebox.zsh -q https://raw.githubusercontent.com/zer0beat/whalebox/master/whalebox.zsh 
     fi
     sed -i -e "/whalebox.zsh/d" $ZSHRC
     echo "source $WHALEBOX/whalebox.zsh" >> $ZSHRC
@@ -122,13 +122,13 @@ function install_powerline_fonts {
     git clone https://github.com/powerline/fonts.git $FONTS
     pushd .
     cd $FONTS
-    powershell.exe install.ps1
+    powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\""
     popd
 }
 
-function configure_windows_registry {
+function configure_windows_console {
     THEME=${THEME:-base16-google-dark-256}
-    wget -P $TMP -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg
+    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg
     pushd .
     cd $TMP
     reg.exe import console_${THEME}.reg
@@ -142,7 +142,7 @@ clean
 if is_wsl; then
     echo "You are on Windows Subsystem Linux!"
     install_powerline_fonts
-    configure_windows_registry
+    configure_windows_console
 fi
 install_git
 install_zsh
