@@ -100,7 +100,17 @@ function install_vim {
 function configure_vim {
     # Configure vim
     echo "Configuring vim"
+    VUNDLE=~/.vim/bundle/Vundle.vim
+    if [[ ! -e "$VUNDLE" ]]; then
+        git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE &>>$LOGFILE
+    fi
+
     wget -O $HOME/.vimrc -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.vimrc &>>$LOGFILE
+}
+
+function install_vim_plugins {
+    echo "Installing vim plugins with Vundle"
+    vim +PluginInstall +qall &>>$LOGFILE
 }
 
 function install_fzf {
@@ -217,3 +227,4 @@ configure_vim
 #install_whalebox
 configure_variables
 change_shell
+install_vim_plugins
