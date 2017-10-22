@@ -9,7 +9,7 @@ function is_wsl {
 }
 
 function clean {
-    sudo apt-get remove -y tmux vim &>$LOGFILE
+    sudo apt-get remove -y tmux vim &>>$LOGFILE
 }
 
 function install_docker {
@@ -19,14 +19,14 @@ function install_docker {
     apt-transport-https \
     ca-certificates \
     curl \
-    software-properties-common &>$LOGFILE
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &>$LOGFILE
+    software-properties-common &>>$LOGFILE
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &>>$LOGFILE
     sudo add-apt-repository \
     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) \
-    stable" &>$LOGFILE
-    sudo apt-get update -y &>$LOGFILE
-    sudo apt-get install -y docker-ce &>$LOGFILE
+    stable" &>>$LOGFILE
+    sudo apt-get update -y &>>$LOGFILE
+    sudo apt-get install -y docker-ce &>>$LOGFILE
 
     # Configure Docker
     sed -i -e '/DOCKER_HOST=/d' $ZSHRC
@@ -36,13 +36,13 @@ function install_docker {
 function install_git {
     # Install Git
     echo "Installing git"
-    sudo apt-get install -y git &>$LOGFILE
+    sudo apt-get install -y git &>>$LOGFILE
 }
 
 function install_zsh {
     # Install Zsh
     echo "Installing zsh"
-    sudo apt-get install -y zsh &>$LOGFILE
+    sudo apt-get install -y zsh &>>$LOGFILE
 }
 
 function install_omz {
@@ -50,7 +50,7 @@ function install_omz {
     echo "Installing Oh my zsh"
     ZSH=~/.oh-my-zsh
     if [[ ! -e "$ZSH" ]]; then
-        git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH &>$LOGFILE
+        git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH &>>$LOGFILE
         cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
         sed "/^export ZSH=/ c\\
         export ZSH=$ZSH
@@ -61,8 +61,8 @@ function install_omz {
     # Configure Oh My Zsh
     ZSH_THEMES=$ZSH/custom/themes/
     mkdir -p $ZSH_THEMES
-    wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme &>$LOGFILE
-    wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme &>$LOGFILE
+    wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme &>>$LOGFILE
+    wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme &>>$LOGFILE
 
     sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"robbyrussell-for-wsl\" ' $ZSHRC
     sed -i -e 's/^plugins=\(.*\)/plugins=(git docker mvn ubuntu tmuxinator git-flow pip python terraform)/' $ZSHRC
@@ -71,18 +71,18 @@ function install_omz {
 function install_tmux {
     # Install tmux (https://github.com/tmux/tmux)
     echo "Installing tmux"
-    type tmux &>$LOGFILE
+    type tmux &>>$LOGFILE
     if [[ $? -ne 0 ]]; then
-        wget -qO- https://gist.github.com/zer0beat/04824c72055fa47325490ee5f842fa4f/raw | TMUX_VERSION=2.5 bash &>$LOGFILE
+        wget -qO- https://gist.github.com/zer0beat/04824c72055fa47325490ee5f842fa4f/raw | TMUX_VERSION=2.5 bash &>>$LOGFILE
     fi
 }
 
 function install_vim {
     # Install vim (https://github.com/vim/vim)
     echo "Installing vim"
-    type vim &>$LOGFILE
+    type vim &>>$LOGFILE
     if [[ $? -ne 0 ]]; then
-        wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash &>$LOGFILE
+        wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash &>>$LOGFILE
     fi
 }
 
@@ -91,8 +91,8 @@ function install_fzf {
     echo "Installing fzf"
     FZF=~/.fzf
     if [[ ! -e "$FZF" ]]; then
-        git clone --depth 1 https://github.com/junegunn/fzf.git $FZF &>$LOGFILE
-        $FZF/install --all &>$LOGFILE
+        git clone --depth 1 https://github.com/junegunn/fzf.git $FZF &>>$LOGFILE
+        $FZF/install --all &>>$LOGFILE
     fi
 }
 
@@ -129,21 +129,21 @@ function install_powerline_fonts {
     echo "Installing Powerline fonts"
     FONTS=$TMP/fonts
     rm -rf $FONTS
-    git clone https://github.com/powerline/fonts.git $FONTS &>$LOGFILE
-    pushd . &>$LOGFILE
+    git clone https://github.com/powerline/fonts.git $FONTS &>>$LOGFILE
+    pushd . &>>$LOGFILE
     cd $FONTS
-    powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\"" &>$LOGFILE
-    popd &>$LOGFILE
+    powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\"" &>>$LOGFILE
+    popd &>>$LOGFILE
 }
 
 function configure_windows_console {
     echo "Configuring Windows console"
     THEME=${THEME:-base16-google-dark-256}
-    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg &>$LOGFILE
-    pushd . &>$LOGFILE
+    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg &>>$LOGFILE
+    pushd . &>>$LOGFILE
     cd $TMP
-    reg.exe import console_${THEME}.reg &>$LOGFILE
-    popd &>$LOGFILE
+    reg.exe import console_${THEME}.reg &>>$LOGFILE
+    popd &>>$LOGFILE
 }
 
 LOGFILE=$TMP/env_conf.log
