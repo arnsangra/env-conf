@@ -98,11 +98,11 @@ function configure_vim {
     echo "Configuring vim"
     VUNDLE=~/.vim/bundle/Vundle.vim
     if [[ ! -e "$VUNDLE" ]]; then
-        git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE
+        git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE &>>$LOGFILE
     fi
 
     wget -O $HOME/.vimrc -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.vimrc &>>$LOGFILE
-    vim +PluginInstall +qall
+    #vim +PluginInstall +qall &>>$LOGFILE
 }
 
 function install_fzf {
@@ -165,7 +165,6 @@ function configure_windows_console {
     reg.exe import console_${THEME}.reg &>>$LOGFILE
     powershell.exe ./Create-CmdShortcut.ps1 &>>$LOGFILE
     popd &>>$LOGFILE
-
 }
 
 LOGFILE=$TMP/env_conf.log
