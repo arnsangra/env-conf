@@ -64,7 +64,7 @@ function install_omz {
     wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme &>>$LOGFILE
     wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme &>>$LOGFILE
 
-    sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"robbyrussell-for-wsl\" ' $ZSHRC
+    sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"agnoster-short\" ' $ZSHRC
     sed -i -e 's/^plugins=\(.*\)/plugins=(git docker mvn ubuntu tmuxinator git-flow pip python terraform)/' $ZSHRC
 }
 
