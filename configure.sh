@@ -95,7 +95,7 @@ function install_vim {
 
 function configure_vim {
     # Configure vim
-    echo "Configuring vundle"
+    echo "Configuring vim"
     VUNDLE=~/.vim/bundle/Vundle.vim
     if [[ ! -e "$ZSH" ]]; then
         git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE
