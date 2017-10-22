@@ -97,7 +97,7 @@ function configure_vim {
     # Configure vim
     echo "Configuring vim"
     VUNDLE=~/.vim/bundle/Vundle.vim
-    if [[ ! -e "$ZSH" ]]; then
+    if [[ ! -e "$VUNDLE" ]]; then
         git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE
     fi
 
