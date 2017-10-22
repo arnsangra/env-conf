@@ -14,18 +14,19 @@ function clean {
 
 function install_docker {
     # Install Docker
+    echo "Installing Docker"
     sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
-    software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    software-properties-common &>$LOGFILE
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &>$LOGFILE
     sudo add-apt-repository \
     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) \
-    stable"
-    sudo apt-get update -y
-    sudo apt-get install -y docker-ce
+    stable" &>$LOGFILE
+    sudo apt-get update -y &>$LOGFILE
+    sudo apt-get install -y docker-ce &>$LOGFILE
 
     # Configure Docker
     sed -i -e '/DOCKER_HOST=/d' $ZSHRC
@@ -97,6 +98,7 @@ function install_fzf {
 
 function install_whalebox {
     # Install whalebox (https://github.com/zer0beat/whalebox)
+    echo "Installing Whalebox"
     WHALEBOX=~/.whalebox
     if [[ ! -e "$WHALEBOX" ]]; then
         mkdir -p $WHALEBOX
@@ -124,16 +126,18 @@ function clean_this_alias_from {
 }
 
 function install_powerline_fonts {
+    echo "Installing Powerline fonts"
     FONTS=$TMP/fonts
     rm -rf $FONTS
-    git clone https://github.com/powerline/fonts.git $FONTS
+    git clone https://github.com/powerline/fonts.git $FONTS &>$LOGFILE
     pushd .
     cd $FONTS
-    powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\""
+    powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\"" &>$LOGFILE
     popd
 }
 
 function configure_windows_console {
+    echo "Configuring Windows console"
     THEME=${THEME:-base16-google-dark-256}
     wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg
     pushd .
