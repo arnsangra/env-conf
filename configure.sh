@@ -96,21 +96,21 @@ function install_vim {
         wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash &>>$LOGFILE
     fi
 }
-
 function configure_vim {
     # Configure vim
     echo "Configuring vim"
-    VUNDLE=~/.vim/bundle/Vundle.vim
-    if [[ ! -e "$VUNDLE" ]]; then
-        git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE &>>$LOGFILE
+
+    echo "  Installing NeoBundle"
+    NEOBUNDLE=~/.vim/bundle/neobundle.vim
+    if [[ ! -e "$NEOBUNDLE" ]]; then
+        git clone https://github.com/Shougo/neobundle.vim $NEOBUNDLE &>>$LOGFILE
     fi
 
+    echo " Installing .vimrc"
     wget -O $HOME/.vimrc -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.vimrc &>>$LOGFILE
-}
 
-function install_vim_plugins {
-    echo "Installing vim plugins with Vundle"
-    vim +PluginInstall +qall &>>$LOGFILE
+    echo "  Installing vim plugins"
+    $NEOBUNDLE/bin/neoinstall
 }
 
 function install_fzf {
@@ -227,4 +227,3 @@ configure_vim
 #install_whalebox
 configure_variables
 change_shell
-install_vim_plugins
