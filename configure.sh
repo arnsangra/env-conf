@@ -68,7 +68,7 @@ function install_omz {
     wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme &>>$LOGFILE
     wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme &>>$LOGFILE
 
-    sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"agnoster-short\" ' $ZSHRC
+    sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"robbyrussell" ' $ZSHRC
     sed -i -e 's/^plugins=\(.*\)/plugins=(git docker mvn ubuntu tmuxinator git-flow pip python terraform)/' $ZSHRC
 }
 
@@ -165,7 +165,7 @@ function install_powerline_fonts {
 
 function configure_windows_console {
     echo "Configuring Windows console"
-    THEME=${THEME:-base16-google-dark-256}
+    THEME=${THEME:-base16-solarized-light-256}
     wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg &>>$LOGFILE
     wget -O $TMP/Create-CmdShortcut.ps1 -q https://raw.githubusercontent.com/zer0beat/env-conf/master/Create-CmdShortcut.ps1 &>>$LOGFILE
     pushd . &>>$LOGFILE

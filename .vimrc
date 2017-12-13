@@ -39,5 +39,5 @@ filetype plugin indent on
 " this will conveniently prompt you to install them.
 NeoBundleCheck
 
-let g:airline_theme='base16_google'
+let g:airline_theme='solarized'
 let g:airline_powerline_fonts = 1
