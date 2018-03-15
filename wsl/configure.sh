@@ -55,21 +55,19 @@ function install_omz {
     ZSH=~/.oh-my-zsh
     if [[ ! -e "$ZSH" ]]; then
         git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH &>>$LOGFILE
-        cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
-        sed "/^export ZSH=/ c\\
-        export ZSH=$ZSH
-        " ~/.zshrc > ~/.zshrc-omztemp
-        mv -f ~/.zshrc-omztemp ~/.zshrc
     fi
 
     # Configure Oh My Zsh
+    wget -O "$ZSHRC" -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.zshrc &>>$LOGFILE
+    
     ZSH_THEMES=$ZSH/custom/themes/
     mkdir -p $ZSH_THEMES
-    wget -O $ZSH_THEMES/agnoster-short.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/agnoster-short.zsh-theme &>>$LOGFILE
-    wget -O $ZSH_THEMES/robbyrussell-for-wsl.zsh-theme -q https://raw.githubusercontent.com/zer0beat/env-conf/master/omz-themes/robbyrussell-for-wsl.zsh-theme &>>$LOGFILE
+    git clone https://github.com/bhilburn/powerlevel9k.git $ZSH_THEMES/powerlevel9k &>>$LOGFILE
 
-    sed -i -e 's ZSH_THEME=\"\(.*\)\" ZSH_THEME=\"robbyrussell" ' $ZSHRC
-    sed -i -e 's/^plugins=\(.*\)/plugins=(git docker mvn ubuntu tmuxinator git-flow pip python terraform)/' $ZSHRC
+    ZSH_PLUGINS=$ZSH/custom/plugins
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PLUGINS/zsh-syntax-highlighting &>>$LOGFILE
+    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS/zsh-autosuggestions &>>$LOGFILE
+    git clone https://github.com/zsh-users/zsh-completions $ZSH_PLUGINS/zsh-completions &>>$LOGFILE
 }
 
 function install_tmux {
@@ -123,18 +121,6 @@ function install_fzf {
     fi
 }
 
-function install_whalebox {
-    # Install whalebox (https://github.com/zer0beat/whalebox)
-    echo "Installing whalebox"
-    WHALEBOX=~/.whalebox
-    if [[ ! -e "$WHALEBOX" ]]; then
-        mkdir -p $WHALEBOX
-        wget -O $WHALEBOX/whalebox.zsh -q https://raw.githubusercontent.com/zer0beat/whalebox/master/whalebox.zsh 
-    fi
-    sed -i -e "/whalebox.zsh/d" $ZSHRC
-    echo "source $WHALEBOX/whalebox.zsh" >> $ZSHRC
-}
-
 function clean_this_elements_from {
     local types=$1
     local elements=$2
@@ -157,17 +143,26 @@ function install_powerline_fonts {
     FONTS=$TMP/fonts
     rm -rf $FONTS
     git clone https://github.com/powerline/fonts.git $FONTS &>>$LOGFILE
-    pushd . &>>$LOGFILE
-    cd $FONTS
+    pushd $FONTS &>>$LOGFILE
     powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\"" &>>$LOGFILE
+    popd &>>$LOGFILE
+}
+
+function install_awesome_terminal_fonts {
+    echo "Installing awesome terminal fonts"
+    FONTS=$TMP/fonts
+    rm -rf $FONTS
+    git clone https://github.com/gabrielelana/awesome-terminal-fonts.git $FONTS &>>$LOGFILE
+    pushd $FONTS &>>$LOGFILE
+    powershell.exe ./install.ps1 &>>$LOGFILE
     popd &>>$LOGFILE
 }
 
 function configure_windows_console {
     echo "Configuring Windows console"
     THEME=${THEME:-base16-solarized-light-256}
-    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/console_${THEME}.reg &>>$LOGFILE
-    wget -O $TMP/Create-CmdShortcut.ps1 -q https://raw.githubusercontent.com/zer0beat/env-conf/master/Create-CmdShortcut.ps1 &>>$LOGFILE
+    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/wsl/console_${THEME}.reg &>>$LOGFILE
+    wget -O $TMP/Create-CmdShortcut.ps1 -q https://raw.githubusercontent.com/zer0beat/env-conf/master/wsl/Create-CmdShortcut.ps1 &>>$LOGFILE
     pushd . &>>$LOGFILE
     cd $TMP
     reg.exe import console_${THEME}.reg &>>$LOGFILE
@@ -210,11 +205,9 @@ ZSHRC=~/.zshrc
 
 update
 clean
-if is_wsl; then
-    echo "You are on Windows Subsystem Linux!"
-    install_powerline_fonts
-    configure_windows_console
-fi
+#install_powerline_fonts
+install_awesome_terminal_fonts
+configure_windows_console
 install_git
 install_zsh
 install_omz
@@ -224,6 +217,5 @@ install_tmux
 configure_tmux
 install_vim
 configure_vim
-#install_whalebox
 configure_variables
 change_shell

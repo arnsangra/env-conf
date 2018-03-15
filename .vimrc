@@ -1,10 +1,8 @@
-set relativenumber
+filetype on
 syntax on
-set hlsearch
-set nu 
-"set cul
-set showcmd
-set t_ut=
+set relativenumber
+set t_Co=256
+set termguicolors
 
 " Note: Skip initialization for vim-tiny or vim-small.
 if 0 | endif
@@ -28,7 +26,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Note: You don't set neobundle setting in .gvimrc!
 NeoBundle  'vim-airline/vim-airline'
 NeoBundle  'vim-airline/vim-airline-themes'
-NeoBundle  'edkolev/tmuxline.vim'
+NeoBundle  'tpope/vim-fugitive'
 
 call neobundle#end()
 
