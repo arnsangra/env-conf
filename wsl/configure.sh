@@ -9,7 +9,7 @@ function is_wsl {
 }
 
 function clean {
-    sudo apt-get remove -y tmux vim &>>$LOGFILE
+    sudo apt-get remove -y tmux vim >> $LOGFILE 2>&1
 }
 
 function update {
@@ -23,14 +23,14 @@ function install_docker {
     apt-transport-https \
     ca-certificates \
     curl \
-    software-properties-common &>>$LOGFILE
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &>>$LOGFILE
+    software-properties-common >> $LOGFILE 2>&1
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - >> $LOGFILE 2>&1
     sudo add-apt-repository \
     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) \
-    stable" &>>$LOGFILE
-    sudo apt-get update -y &>>$LOGFILE
-    sudo apt-get install -y docker-ce &>>$LOGFILE
+    stable" >> $LOGFILE 2>&1
+    sudo apt-get update -y >> $LOGFILE 2>&1
+    sudo apt-get install -y docker-ce >> $LOGFILE 2>&1
 
     # Configure Docker
     sed -i -e '/DOCKER_HOST=/d' $ZSHRC
@@ -40,13 +40,13 @@ function install_docker {
 function install_git {
     # Install Git
     echo "Installing git"
-    sudo apt-get install -y git &>>$LOGFILE
+    sudo apt-get install -y git >> $LOGFILE 2>&1
 }
 
 function install_zsh {
     # Install Zsh
     echo "Installing zsh"
-    sudo apt-get install -y zsh &>>$LOGFILE
+    sudo apt-get install -y zsh >> $LOGFILE 2>&1
 }
 
 function install_omz {
@@ -54,61 +54,52 @@ function install_omz {
     echo "Installing oh my zsh"
     ZSH=~/.oh-my-zsh
     if [[ ! -e "$ZSH" ]]; then
-        git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH &>>$LOGFILE
+        git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH >> $LOGFILE 2>&1
     fi
 
     # Configure Oh My Zsh
-    wget -O "$ZSHRC" -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.zshrc &>>$LOGFILE
+    wget -O "$ZSHRC" -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.zshrc >> $LOGFILE 2>&1
     
     ZSH_THEMES=$ZSH/custom/themes/
     mkdir -p $ZSH_THEMES
-    git clone https://github.com/bhilburn/powerlevel9k.git $ZSH_THEMES/powerlevel9k &>>$LOGFILE
+    git clone https://github.com/bhilburn/powerlevel9k.git $ZSH_THEMES/powerlevel9k >> $LOGFILE 2>&1
 
     ZSH_PLUGINS=$ZSH/custom/plugins
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PLUGINS/zsh-syntax-highlighting &>>$LOGFILE
-    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS/zsh-autosuggestions &>>$LOGFILE
-    git clone https://github.com/zsh-users/zsh-completions $ZSH_PLUGINS/zsh-completions &>>$LOGFILE
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PLUGINS/zsh-syntax-highlighting >> $LOGFILE 2>&1
+    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS/zsh-autosuggestions >> $LOGFILE 2>&1
+    git clone https://github.com/zsh-users/zsh-completions $ZSH_PLUGINS/zsh-completions >> $LOGFILE 2>&1
 }
 
 function install_tmux {
     # Install tmux (https://github.com/tmux/tmux)
     echo "Installing tmux"
-    type tmux &>>$LOGFILE
+    type tmux >> $LOGFILE 2>&1
     if [[ $? -ne 0 ]]; then
-        wget -qO- https://gist.github.com/zer0beat/04824c72055fa47325490ee5f842fa4f/raw | TMUX_VERSION=2.5 bash &>>$LOGFILE
+        wget -qO- https://gist.github.com/zer0beat/04824c72055fa47325490ee5f842fa4f/raw | TMUX_VERSION=2.6 bash >> $LOGFILE 2>&1
     fi
-}
-
-function configure_tmux {
-    # Configure tmux
-    echo "Configuring tmux"
-    wget -O $HOME/.tmux.conf -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.tmux.conf &>>$LOGFILE
-    wget -O $HOME/.tmuxline.snap -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.tmuxline.snap &>>$LOGFILE
+    wget -O ~/.tmux.conf -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.tmux.conf >> $LOGFILE 2>&1
+    wget -O ~/.tmuxline.conf -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.tmuxline.conf >> $LOGFILE 2>&1
 }
 
 function install_vim {
     # Install vim (https://github.com/vim/vim)
     echo "Installing vim"
-    type vim &>>$LOGFILE
+    type vim >> $LOGFILE 2>&1
     if [[ $? -ne 0 ]]; then
-        wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash &>>$LOGFILE
+        wget -qO- https://gist.github.com/zer0beat/2f3aa1e81d9bedb0355a46e59ffcea34/raw | VIM_VERSION=8.0.1111 bash >> $LOGFILE 2>&1
     fi
-}
-function configure_vim {
-    # Configure vim
-    echo "Configuring vim"
 
     echo "  Installing NeoBundle"
     NEOBUNDLE=~/.vim/bundle/neobundle.vim
     if [[ ! -e "$NEOBUNDLE" ]]; then
-        git clone https://github.com/Shougo/neobundle.vim $NEOBUNDLE &>>$LOGFILE
+        git clone https://github.com/Shougo/neobundle.vim $NEOBUNDLE >> $LOGFILE 2>&1
     fi
-
+    
     echo " Installing .vimrc"
-    wget -O $HOME/.vimrc -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.vimrc &>>$LOGFILE
+    wget -O ~/.vimrc -q https://raw.githubusercontent.com/zer0beat/env-conf/master/.vimrc >> $LOGFILE 2>&1
 
     echo "  Installing vim plugins"
-    $NEOBUNDLE/bin/neoinstall
+    $NEOBUNDLE/bin/neoinstall >> $LOGFILE 2>&1
 }
 
 function install_fzf {
@@ -116,8 +107,8 @@ function install_fzf {
     echo "Installing fzf"
     FZF=~/.fzf
     if [[ ! -e "$FZF" ]]; then
-        git clone --depth 1 https://github.com/junegunn/fzf.git $FZF &>>$LOGFILE
-        $FZF/install --all &>>$LOGFILE
+        git clone --depth 1 https://github.com/junegunn/fzf.git $FZF >> $LOGFILE 2>&1
+        $FZF/install --all >> $LOGFILE 2>&1
     fi
 }
 
@@ -142,32 +133,47 @@ function install_powerline_fonts {
     echo "Installing powerline fonts"
     FONTS=$TMP/fonts
     rm -rf $FONTS
-    git clone https://github.com/powerline/fonts.git $FONTS &>>$LOGFILE
-    pushd $FONTS &>>$LOGFILE
-    powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\"" &>>$LOGFILE
-    popd &>>$LOGFILE
+    git clone https://github.com/powerline/fonts.git $FONTS >> $LOGFILE 2>&1
+    pushd $FONTS >> $LOGFILE 2>&1
+    powershell.exe ./install.ps1 "\"DejaVu Sans Mono for Powerline\"" >> $LOGFILE 2>&1
+    popd >> $LOGFILE 2>&1
 }
 
-function install_awesome_terminal_fonts {
+function install_awesome_fonts {
     echo "Installing awesome terminal fonts"
     FONTS=$TMP/fonts
     rm -rf $FONTS
-    git clone https://github.com/gabrielelana/awesome-terminal-fonts.git $FONTS &>>$LOGFILE
-    pushd $FONTS &>>$LOGFILE
-    powershell.exe ./install.ps1 &>>$LOGFILE
-    popd &>>$LOGFILE
+    git clone https://github.com/gabrielelana/awesome-terminal-fonts.git $FONTS >> $LOGFILE 2>&1
+    pushd $FONTS >> $LOGFILE 2>&1
+    powershell.exe ./install.ps1 >> $LOGFILE 2>&1
+    popd >> $LOGFILE 2>&1
+}
+
+function install_terraform {
+    echo "Instaling terraform"
+    git clone https://github.com/kamatama41/tfenv.git ~/.tfenv >> $LOGFILE 2>&1
+    ln -s ~/.tfenv/bin/* /usr/local/bin
+    tfenv install latest >> $LOGFILE 2>&1
+}
+
+function install_kubectl {
+    echo "Installing kubectl"
+    ln -s /mnt/c/Program\ Files/Docker/Docker/resources/bin/kubectl.exe /usr/local/bin/kubectl >> $LOGFILE 2>&1
+    wget -O /usr/local/bin/kubectx https://github.com/ahmetb/kubectx/raw/master/kubectx >> $LOGFILE 2>&1
+    wget -O /usr/local/bin/kubens https://github.com/ahmetb/kubectx/raw/master/kubens >> $LOGFILE 2>&1
+    wget -O ~/.kubectl_aliases https://rawgit.com/ahmetb/kubectl-alias/master/.kubectl_aliases >> $LOGFILE 2>&1
 }
 
 function configure_windows_console {
     echo "Configuring Windows console"
     THEME=${THEME:-base16-solarized-light-256}
-    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/wsl/console_${THEME}.reg &>>$LOGFILE
-    wget -O $TMP/Create-CmdShortcut.ps1 -q https://raw.githubusercontent.com/zer0beat/env-conf/master/wsl/Create-CmdShortcut.ps1 &>>$LOGFILE
-    pushd . &>>$LOGFILE
+    wget -O $TMP/console_${THEME}.reg -q https://raw.githubusercontent.com/zer0beat/env-conf/master/wsl/console_${THEME}.reg >> $LOGFILE 2>&1
+    wget -O $TMP/Create-CmdShortcut.ps1 -q https://raw.githubusercontent.com/zer0beat/env-conf/master/wsl/Create-CmdShortcut.ps1 >> $LOGFILE 2>&1
+    pushd . >> $LOGFILE 2>&1
     cd $TMP
-    reg.exe import console_${THEME}.reg &>>$LOGFILE
-    powershell.exe ./Create-CmdShortcut.ps1 &>>$LOGFILE
-    popd &>>$LOGFILE
+    reg.exe import console_${THEME}.reg >> $LOGFILE 2>&1
+    powershell.exe ./Create-CmdShortcut.ps1 >> $LOGFILE 2>&1
+    popd >> $LOGFILE 2>&1
 }
 
 function configure_variables {
@@ -193,20 +199,21 @@ function configure_variables {
     echo 'alias h="cd $WINDOWS_HOME"' >> $ZSHRC
 }
 
-function change_shell {
+function set_zsh_as_default_shell {
     echo "Changing shell to zsh"
     sudo sed -i 's/auth       required   pam_shells.so/auth       sufficient   pam_shells.so/' /etc/pam.d/chsh
-    chsh -s $(which zsh)
+    chsh -s $(which zsh) >> $LOGFILE 2>&1
     sudo sed -i 's/auth       sufficient   pam_shells.so/auth       required   pam_shells.so/' /etc/pam.d/chsh
 }
 
 LOGFILE=$TMP/env_conf.log
 ZSHRC=~/.zshrc
 
+date > $LOGFILE
+
 update
 clean
-#install_powerline_fonts
-install_awesome_terminal_fonts
+install_awesome_fonts
 configure_windows_console
 install_git
 install_zsh
@@ -214,8 +221,8 @@ install_omz
 install_fzf
 install_docker
 install_tmux
-configure_tmux
 install_vim
-configure_vim
+install_kubectl
+install_terraform
 configure_variables
-change_shell
+set_zsh_as_default_shell
