@@ -69,6 +69,7 @@ plugins=(
     pip
     zsh-syntax-highlighting
     zsh-autosuggestions
+    zsh-completions
 )
 
 ZSH_TMUX_AUTOSTART=true
