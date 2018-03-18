@@ -206,6 +206,31 @@ function set_zsh_as_default_shell {
     sudo sed -i 's/auth       sufficient   pam_shells.so/auth       required   pam_shells.so/' /etc/pam.d/chsh
 }
 
+function install_chocolatey {
+    echo "Installing chocolatey"
+    powershell.exe -ExecutionPolicy Bypass -Command "Start-Process -Verb runAs -FilePath \"powershell\" -ArgumentList \"iex\",\"((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\""
+}
+
+function install_chocolatey_packages {
+    echo "Installing chocolatey packages"
+    # --ignore-checksums flag enabled because spotify fails to install, this flag must be deleted in future updates of this script
+    powershell.exe -ExecutionPolicy Bypass -Command "Start-Process -Verb runAs -FilePath \"powershell\" -ArgumentList \
+    \"choco\", \
+    \"install\", \
+    \"--yes\",
+    \"--ignore-checksums\",
+        \"git\",
+        \"gitkraken\",
+        \"authy\",
+        \"spotify\",
+        \"googlechrome\",
+        \"firefox\",
+        \"docker-for-windows --pre\",
+        \"7zip\",
+        \"caffeine\"
+    "
+}
+
 LOGFILE=$TMP/env_conf.log
 ZSHRC=~/.zshrc
 
@@ -226,3 +251,6 @@ install_kubectl
 install_terraform
 configure_variables
 set_zsh_as_default_shell
+
+install_chocolatey
+install_chocolatey_packages
