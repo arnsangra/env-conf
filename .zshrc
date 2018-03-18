@@ -104,13 +104,9 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export EDITOR='vim'
-export DEFAULT_USER='z0beat'
-export TMP='~/tmp/'
-export PROJECTS='/projects/'
-alias p="cd $PROJECTS"
-alias t="cd $TMP"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
+
+
 

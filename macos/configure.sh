@@ -235,6 +235,7 @@ configure_variables
 set_zsh_as_default_shell
 
 # Install desktop apps
+install_awesome_fonts
 install_iterm2
 install_caffeine
 install_chrome
@@ -249,4 +250,3 @@ install_tunnelblick
 install_unarchiver
 install_bettertouchtool
 install_remote_desktop
-install_awesome_fonts
