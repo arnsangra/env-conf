@@ -159,7 +159,8 @@ function install_omz {
     git clone https://github.com/bhilburn/powerlevel9k.git $ZSH_THEMES/powerlevel9k >> $LOGFILE 2>&1
 
     ZSH_PLUGINS=$ZSH/custom/plugins
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PLUGINS/zsh-syntax-highlighting >> $LOGFILE 2>&1
+    brew install zsh-syntax-highlighting
+    # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PLUGINS/zsh-syntax-highlighting >> $LOGFILE 2>&1
     git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS/zsh-autosuggestions >> $LOGFILE 2>&1
     git clone https://github.com/zsh-users/zsh-completions $ZSH_PLUGINS/zsh-completions >> $LOGFILE 2>&1
 }
