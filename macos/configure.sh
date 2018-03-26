@@ -160,8 +160,14 @@ function install_omz {
 
     ZSH_PLUGINS=$ZSH/custom/plugins
     brew install zsh-syntax-highlighting
+    echo '# zsh syntax highlighting' >> $ZSHRC
+    echo 'source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> $ZSHRC
     # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PLUGINS/zsh-syntax-highlighting >> $LOGFILE 2>&1
-    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS/zsh-autosuggestions >> $LOGFILE 2>&1
+
+    brew install zsh-autosuggestions
+    echo '# zsh autosuggestions' >> $ZSHRC
+    echo 'source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> $ZSHRC
+    #git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS/zsh-autosuggestions >> $LOGFILE 2>&1
     git clone https://github.com/zsh-users/zsh-completions $ZSH_PLUGINS/zsh-completions >> $LOGFILE 2>&1
 }
 
