@@ -223,10 +223,15 @@ function set_zsh_as_default_shell {
     chsh -s $(which zsh) >> $LOGFILE 2>&1
 }
 
+PROJECTS_FOLDER='Repositories'
 LOGFILE=$TMP/env_conf.log
 ZSHRC=~/.zshrc
 
 date > $LOGFILE
+
+if [[ -d $HOME/$PROJECTS_FOLDER ]]; then
+    mkdir -p ${PROJECTS_FOLDER}
+fi
 
 # Configure console
 install_homebrew
