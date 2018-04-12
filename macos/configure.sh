@@ -224,7 +224,7 @@ function set_zsh_as_default_shell {
 }
 
 PROJECTS_FOLDER='Repositories'
-LOGFILE=$TMP/env_conf.log
+LOGFILE=$TMPDIR/env_conf.log
 ZSHRC=~/.zshrc
 
 date > $LOGFILE
